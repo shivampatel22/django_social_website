@@ -10,16 +10,6 @@ class Profile(models.Model):
     def __str__(self):
         return 'Profile for user {}'.format(self.user.username)
 
-class Profile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL,
-                                on_delete=models.CASCADE)
-    birth_date = models.DateField(blank=True, null=True)
-    photo = models.ImageField(upload_to='users/%Y/%m/%d/',
-                              blank=True)
-
-    def __str__(self):
-        return f'Profile of {self.user.username}'
-
 
 class Contact(models.Model):
     user_from = models.ForeignKey('auth.User',
