@@ -15,6 +15,7 @@ class UserRegistrationForm(forms.ModelForm):
         fields = ('username', 'first_name', 'email')
     
     def clean_password2(self):
+        '''validates if the password and password2 are same'''
         cd = self.cleaned_data
         if cd['password'] != cd['password2']:
             raise forms.ValidationError('Passwords don\'t match.')
