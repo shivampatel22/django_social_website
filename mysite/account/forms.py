@@ -27,6 +27,8 @@ class UserEditForm(forms.ModelForm):
         fields = ('first_name', 'last_name', 'email')
     
 class ProfileEditForm(forms.ModelForm):
+    birth_date = forms.DateField(input_formats=['%Y-%m-%d'],
+                                 help_text="Please use the following format: <em>YYYY-MM-DD</em>.")
     class Meta:
         model = Profile
         fields = ('birth_date', 'photo')

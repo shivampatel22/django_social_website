@@ -2,3 +2,4 @@ mysite/mysite/settings.py
 mysite/cert.crt
 mysite/cert.key
 venv
+mysite/db.sqlite3

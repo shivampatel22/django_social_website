@@ -39,8 +39,11 @@ def register(request):
         user_form = UserRegistrationForm(request.POST)
         if user_form.is_valid():
             new_user = user_form.save(commit=False)
+            # set the password
             new_user.set_password(user_form.cleaned_data['password'])
+            # save the user object
             new_user.save()
+            # create the user profile
             Profile.objects.create(user=new_user)
             return render(request, 'account/register_done.html', {'new_user':new_user})
     else:
