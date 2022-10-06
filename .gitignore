@@ -3,3 +3,4 @@ mysite/cert.crt
 mysite/cert.key
 venv
 mysite/db.sqlite3
+mysite/db.sqlite3
