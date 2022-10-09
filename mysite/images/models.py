@@ -23,4 +23,4 @@ class Image(models.Model):
         super().save(*args, **kwargs)
     
     def get_absolute_url(self):
-        reverse('detail', args=[self.id, self.slug])
+        return reverse('detail', args=[self.id, self.slug])
