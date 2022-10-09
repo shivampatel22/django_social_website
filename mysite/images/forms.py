@@ -14,7 +14,7 @@ class ImageCreateForm(forms.ModelForm):
     
     def clean_url(self):
         url = self.cleaned_data['url']
-        valid_extensions = ['jpeg', 'jpg']
+        valid_extensions = ['jpeg', 'jpg', 'png']
         extension = url.rsplit('.', 1)[1].lower()
         if extension not in valid_extensions:
             raise forms.ValidationError('The given URL does not match valid image extensions.')
@@ -25,6 +25,7 @@ class ImageCreateForm(forms.ModelForm):
         image_url = self.cleaned_data['url']
         name = slugify(image.title)
         extension = image_url.rsplit('.', 1)[1].lower()
+        # download image from the given URL
         response = request.urlopen(image_url)
         image_name = f'{name}.{extension}'
         image.image.save(image_name,
