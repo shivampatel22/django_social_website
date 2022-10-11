@@ -51,18 +51,24 @@ def is_ajax(request):
 
 @login_required
 def image_list(request):
+    '''
+    view to handle both HTTP and AJAX request for image list
+    '''
     images = Image.objects.all()
     paginator = Paginator(images, 8)
     page = request.GET.get('page')
+    images_only = request.GET.get('images_only')
     try:
         images = paginator.page(page)
     except PageNotAnInteger:
+        # If page is not an integer deliver the first page
         images = paginator.page(1)
-    except EmptyPage:
-        if is_ajax(request=request):
+    except EmptyPage:   
+        if images_only:
+            # If AJAX request and page out of range return an empty page
             return HttpResponse('')
         images = paginator.page(paginator.num_pages)
-    if is_ajax(request=request):
-        return render(request, 'images/image/list_ajax.html', {'section':'images', 'images':images})
+    if images_only:
+        return render(request, 'images/image/list_images.html', {'section':'images', 'images':images})
     return render(request, 'images/image/list.html', {'section':'images', 'images':images})
     
