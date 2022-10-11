@@ -12,6 +12,9 @@ class Profile(models.Model):
 
 
 class Contact(models.Model):
+    '''
+    Intermediary model for M2M relation 
+    '''
     user_from = models.ForeignKey('auth.User',
                                   related_name='rel_from_set',
                                   on_delete=models.CASCADE)

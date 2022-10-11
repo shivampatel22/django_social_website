@@ -78,7 +78,7 @@ def user_details(request, username):
 
 @login_required
 @require_POST
-@ajax_required
+# @ajax_required
 def user_follow(request):
     user_id = request.POST.get('id')
     action = request.POST.get('action')
