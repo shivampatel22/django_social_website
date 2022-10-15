@@ -7,19 +7,26 @@ from django.views.decorators.http import require_POST
 from django.http import HttpResponse, JsonResponse
 from common.decorators import ajax_required
 from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
+from actions.utils import create_action
 
 @login_required
 def image_create(request):
     if request.method == 'POST':
+        # form is sent
         form = ImageCreateForm(data=request.POST)
         if form.is_valid():
+            # form data is valid
             cd = form.cleaned_data
             new_item = form.save(commit=False)
+            # assign current user to the item
             new_item.user = request.user
             new_item.save()
+            create_action(request.user, 'bookmarked image', new_item)
             messages.success(request, 'Image added successfully')
+            # redirect to new created image detail view
             return redirect(new_item.get_absolute_url())
     else:
+        # build form with data provided by the bookmarklet via GET
         form = ImageCreateForm(request.GET)
 
     return render(request, 'images/image/create.html', {'section':'images', 'form':form})
@@ -39,6 +46,7 @@ def image_like(request):
             image = Image.objects.get(id=image_id)
             if action == 'like':
                 image.users_liked.add(request.user)
+                create_action(request.user, 'likes', image)
             else:
                 image.users_liked.remove(request.user)
             return JsonResponse({'status':'ok'})

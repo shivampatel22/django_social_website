@@ -1,3 +1,4 @@
+from email.policy import default
 from django.db import models
 from django.conf import settings
 from django.utils.text import slugify
@@ -10,9 +11,18 @@ class Image(models.Model):
     url = models.URLField()
     image = models.ImageField(upload_to='images/%Y/%m/%d/')
     description = models.TextField(blank=True)
-    created_at = models.DateField(auto_now_add=True, db_index=True)
+    created_at = models.DateField(auto_now_add=True)
+    users_liked = models.ManyToManyField(settings.AUTH_USER_MODEL,
+                                         related_name='images_liked', 
+                                         blank=True)
+    total_likes = models.PositiveIntegerField(default=0)
 
-    users_liked = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='images_liked', blank=True)
+    class Meta:
+        indexes = [
+            models.Index(fields=['-created_at']),
+            models.Index(fields=['-total_likes']),
+        ]
+        ordering = ['-created_at']
 
     def __str__(self):
         return self.title
